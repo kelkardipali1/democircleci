@@ -45,5 +45,5 @@ workflows:
   build-and-publish-docker-image:
   jobs:
     - docker_build:
-        dockerfile: Dockerfile
+        dockerfile: "Dockerfile"
         - run: docker build --file ${dockerfile} -t image .
