@@ -46,4 +46,4 @@ workflows:
   jobs:
     - docker_build:
         dockerfile: "Dockerfile"
-        - run: docker build --file ${dockerfile} -t image .
+        - run: docker build --file "Dockerfile" -t image .
