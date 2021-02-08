@@ -41,6 +41,9 @@ jobs:
       # run tests!
       - run: gradle clean build
 
+      - Upload_jar_artifact:
+          path: build/libs/app.jar
+
   build_docker:
     environment:
       DOCKER_FILE: "Dockerfile"
