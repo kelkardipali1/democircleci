@@ -64,7 +64,7 @@ jobs:
           command:  docker build --file ${DOCKER_FILE} -t image .
       - run:
           name: docker tag
-          command: docker tag image registry.hosted/repository/service-starter-docker-hosted/${SERVICE}:${GIT_COMMIT}
+          command: docker tag image registry.hosted/repository/service-starter-docker-hosted/${SERVICE}:latest
 
 workflows:
   version: 2
