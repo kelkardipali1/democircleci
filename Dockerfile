@@ -1,5 +1,4 @@
 FROM java:8-jdk-alpine
 COPY build/libs/* app.jar
-COPY config/* config/
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "/democircleci-0.0.1-SNAPSHOT.jar"]
