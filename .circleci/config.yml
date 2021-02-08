@@ -42,6 +42,7 @@ jobs:
       - run: gradle clean build
 
 workflows:
+  version: 2.1
   build-and-publish-docker-image:
   jobs:
     - docker_build:
