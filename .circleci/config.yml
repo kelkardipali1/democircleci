@@ -51,7 +51,7 @@ jobs:
   build_docker:
     environment:
       DOCKER_FILE: "Dockerfile"
-      IMAGE_NAME: "democircle"
+      SERVICE: "democircle"
     working_directory: ~/democircleci
     docker:
       - image: circleci/buildpack-deps:stretch
@@ -62,6 +62,9 @@ jobs:
       - run:
           name: Build Docker image
           command:  docker build --file ${DOCKER_FILE} -t image .
+      - run:
+          name: docker tag
+          command: docker tag image registry.hosted/repository/service-starter-docker-hosted/${SERVICE}:${GIT_COMMIT}
 
 workflows:
   version: 2
