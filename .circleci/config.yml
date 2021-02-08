@@ -40,8 +40,8 @@ jobs:
 
       # run tests!
       - run: gradle clean build
-  jobs:
-    build_docker:
+
+  build_docker:
     environment:
       DOCKER_FILE: "Dockerfile"
       IMAGE_NAME: "democircle"
