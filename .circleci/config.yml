@@ -14,7 +14,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: ~/repo
+    working_directory: ~/democircleci
 
     environment:
       # Customize the JVM maximum heap limit
@@ -40,16 +40,13 @@ jobs:
 
       # run tests!
       - run: gradle clean build
+      - persist_to_workspace:
+          root: ~/democircleci
+          paths:
+            - Dockerfile
+            - build
 
-      - run:
-          name: Creating Dummy Artifacts
-          command: |
-            echo "my artifact file" > /tmp/artifact-1;
-            mkdir /tmp/artifacts;
-            echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
 
-      - store_artifacts:
-          path: /tmp/artifacts
 
   build_docker:
     environment:
@@ -58,8 +55,9 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
-      - checkout
       - setup_remote_docker
+      - attach_workspace:
+          at: ~/democircleci
       - run:
           name: Build Docker image
           command: docker build -t $IMAGE_NAME:latest .
