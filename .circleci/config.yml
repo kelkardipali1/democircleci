@@ -41,9 +41,9 @@ jobs:
       # run tests!
       - run: gradle clean build
 
-  docker_build:
-    - steps:
-      - build
-      - run: docker build --file Dockerfile -t image .
-
-
+workflows:
+  build-and-publish-docker-image:
+  jobs:
+    - docker_build:
+        dockerfile: Dockerfile
+        - run: docker build --file ${dockerfile} -t image .
