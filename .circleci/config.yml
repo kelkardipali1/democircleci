@@ -52,6 +52,7 @@ jobs:
     environment:
       DOCKER_FILE: "Dockerfile"
       IMAGE_NAME: "democircle"
+    working_directory: ~/democircleci
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
