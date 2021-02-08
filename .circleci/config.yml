@@ -43,5 +43,7 @@ jobs:
 
 build-and-publish-docker-image:
     jobs:
+      steps:
+      - docker build
       - docker/publish:
           - run: docker build -t image .
