@@ -40,10 +40,31 @@ jobs:
 
       # run tests!
       - run: gradle clean build
+  jobs:
+    build_docker:
+    environment:
+      DOCKER_FILE: "Dockerfile"
+      IMAGE_NAME: "democircle"
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: docker build -t $IMAGE_NAME:latest .
 
-build-and-publish-docker-image:
+workflows:
+  version: 2
+  build_circleci:
     jobs:
-      steps:
-      - docker build
-      - docker/publish:
-          - run: docker build -t image .
+      - build:
+          filters:
+            branches:
+              only: circleci-project-setup
+      - build_docker:
+          requires:
+            - build
+          filters:
+            branches:
+              only: circleci-project-setup
