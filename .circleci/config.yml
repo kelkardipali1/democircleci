@@ -64,7 +64,7 @@ jobs:
           command:  docker build --file ${DOCKER_FILE} -t image .
       - run:
           name: get env from context
-          command: echo ${NEXUS_USER}
+          command: echo $NEXUS_USER
 
 workflows:
   version: 2
