@@ -77,6 +77,8 @@ workflows:
             branches:
               only: circleci-project-setup
       - build_docker:
+          context:
+            - project_secrets
           requires:
             - build
           filters:
