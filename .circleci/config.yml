@@ -81,10 +81,9 @@ jobs:
       - run:
           name: docker tag
           command: docker tag image registry.hosted/repository/service-starter-docker-hosted/${SERVICE}:latest
-
       - run:
-          name: get docker images
-          command: docker images
+          name: docker login
+          command: docker login -u ${NEXUS_USER} -p ${NEXUS_PASSWORD} http://registry.hosted/repository/service-starter-docker-hosted/
 #  aws_cli_example:
 #    working_directory: ~/democircleci
 #    executor: aws-cli/default
