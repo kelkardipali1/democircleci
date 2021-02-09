@@ -81,6 +81,7 @@ jobs:
       - run:
           name: docker tag
           command: docker tag image registry.hosted/repository/service-starter-docker-hosted/${SERVICE}:latest
+
       - run:
           name: get docker images
           command: docker images
