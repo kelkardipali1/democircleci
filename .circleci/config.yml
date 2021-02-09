@@ -72,6 +72,9 @@ jobs:
           name: get kubeconfig
           command: aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
       - run:
+          name: verify cluster
+          command: kubectl get pods -A
+      - run:
           name: docker tag
           command: docker tag image registry.hosted/repository/service-starter-docker-hosted/${SERVICE}:latest
 #  aws_cli_example:
