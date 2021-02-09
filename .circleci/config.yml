@@ -62,19 +62,24 @@ jobs:
       - run:
           name: get env from context
           command: echo $NEXUS_USER
-
-  aws_cli_example:
-    working_directory: ~/democircleci
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile-name: example
       - run:
-          name: aws configurations
+          name: install aws cli
+          command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.16.312.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+      - run:
+          name: verify aws
           command: aws --version
-orbs:
-  aws-cli: circleci/aws-cli@1.18.192
+#  aws_cli_example:
+#    working_directory: ~/democircleci
+#    executor: aws-cli/default
+#    steps:
+#      - checkout
+#      - aws-cli/setup:
+#          profile-name: example
+#      - run:
+#          name: aws configurations
+#          command: aws --version
+#orbs:
+#  aws-cli: circleci/aws-cli@1.18.192
 
 
 workflows:
@@ -92,12 +97,6 @@ workflows:
             - project_secrets
           requires:
             - build
-          filters:
-            branches:
-              only: circleci-project-setup
-      - aws_cli_example:
-          context:
-            - project_secrets
           filters:
             branches:
               only: circleci-project-setup
