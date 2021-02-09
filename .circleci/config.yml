@@ -66,6 +66,18 @@ jobs:
           name: get env from context
           command: echo $NEXUS_USER
 
+orbs:
+  aws-cli: circleci/aws-cli@1.18.192
+  aws-cli-example:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: example
+      - run:
+          name: aws configurations
+          command: aws --version
+
 workflows:
   version: 2
   build_circleci:
@@ -84,3 +96,10 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
+      - aws-cli-example:
+          context:
+            - project_secrets
+          filters:
+            branches:
+              only: circleci-project-setup
+
