@@ -62,7 +62,8 @@ jobs:
       - run:
           name: get env from context
           command: echo $NEXUS_USER
-  aws-cli-example:
+
+  aws_cli_example:
     working_directory: ~/democircleci
     executor: aws-cli/default
     steps:
@@ -94,7 +95,7 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
-      - aws-cli-example:
+      - aws_cli_example:
           context:
             - project_secrets
           filters:
