@@ -2,7 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
+version: 2.1
 orbs:
 #  aws-eks: circleci/aws-eks@1.0.0
   kubernetes: circleci/kubernetes@0.11.1
