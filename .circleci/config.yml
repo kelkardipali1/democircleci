@@ -81,23 +81,6 @@ jobs:
 #          name: docker login
 #          command: docker login -u ${NEXUS_USER} -p ${NEXUS_PASSWORD} http://registry.hosted/repository/service-starter-docker-hosted/
 
-#  aws_configure:
-#    working_directory: ~/democircleci
-#    docker:
-#      - image: circleci/buildpack-deps:stretch
-#    steps:
-#      - install-dependencies
-#      - setup_remote_docker
-#      - run:
-#          name: configure aws
-#          command: aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
-#      - run:
-#          name: get kubeconfig
-#          command: aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
-#      - run:
-#          name: verify cluster
-#          command: kubectl get pods -A
-
 workflows:
   version: 2
   build_circleci:
@@ -113,14 +96,8 @@ workflows:
             - project_secrets
           requires:
             - build
-            - aws_configure
           filters:
             branches:
               only: circleci-project-setup
-#      - aws_configure:
-#          context:
-#            - project_secrets
-#          filters:
-#            branches:
-#              only: circleci-project-setup
+
 
