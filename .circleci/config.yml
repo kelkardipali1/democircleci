@@ -107,7 +107,7 @@ jobs:
       - persist_to_workspace:
           root: ~/democircleci
           paths:
-            - aws_configure
+            - aws
 
 workflows:
   version: 2
