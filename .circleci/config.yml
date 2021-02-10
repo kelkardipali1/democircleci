@@ -20,6 +20,16 @@ commands:
           command: |
             aws --version && aws configure set aws_access_key_id $AWS-ACCESS_KEY && aws configure set aws_secret_access_key $AWS-SECRET-KEY && aws configure set default.region ap-south-1 && aws configure list
             aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
+      - aws-ecr/build-and-push-image:
+          account-url: 793463097803.dkr.ecr.ap-south-1.amazonaws.com
+          aws-access-key-id: $AWS-ACCESS_KEY
+          aws-secret-access-key: $AWS-SECRET-KEY
+          create-repo: true
+          dockerfile: $DOCKER-FILE
+          region: ap-south-1
+          repo: democircleci
+          skip-when-tags-exist: false
+          tag: 'latest'
 
 jobs:
   build:
@@ -64,17 +74,6 @@ jobs:
     steps:
       - install-dependencies
       - setup_remote_docker
-      - aws-ecr/build-and-push-image:
-          account-url: 793463097803.dkr.ecr.ap-south-1.amazonaws.com
-          aws-access-key-id: $AWS-ACCESS_KEY
-          aws-secret-access-key: $AWS-SECRET-KEY
-          create-repo: true
-          dockerfile: $DOCKER-FILE
-          region: ap-south-1
-          repo: democircleci
-          skip-when-tags-exist: false
-          tag: 'latest'
-
       - attach_workspace:
           at: ~/democircleci
       - run:
