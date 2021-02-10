@@ -70,7 +70,6 @@ jobs:
           aws-secret-access-key: $AWS_SECRET_KEY
           create-repo: true
           dockerfile: $DOCKER_FILE
-          profile-name: myProfileName
           region: ap-south-1
           repo: democircleci
           skip-when-tags-exist: false
