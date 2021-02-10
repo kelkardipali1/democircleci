@@ -52,7 +52,7 @@ jobs:
     environment:
       DOCKER_FILE: "Dockerfile"
       SERVICE: "democircle"
-    working_directory: ~/democircleci/aws
+    working_directory: ~/democircleci
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
@@ -86,7 +86,7 @@ jobs:
 #          command: docker login -u ${NEXUS_USER} -p ${NEXUS_PASSWORD} http://registry.hosted/repository/service-starter-docker-hosted/
 
   aws_configure:
-    working_directory: ~/democircleci/aws
+    working_directory: ~/democircleci
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
