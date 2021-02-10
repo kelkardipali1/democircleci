@@ -52,14 +52,14 @@ jobs:
     environment:
       DOCKER_FILE: "Dockerfile"
       SERVICE: "democircle"
-    working_directory: ~/democircleci
+    working_directory: ~/democircleci/aws
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
       - setup_remote_docker
 #      - kubernetes/install
       - attach_workspace:
-          at: ~/democircleci/aws
+          at: ~/democircleci
       - run:
           name: Build Docker image
           command:  docker build --file ${DOCKER_FILE} -t image .
