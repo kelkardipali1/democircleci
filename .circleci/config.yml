@@ -78,6 +78,9 @@ jobs:
       - run:
           name: docker tag
           command: docker tag image 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
+      - run:
+          name: docker push
+          command: docker push 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
 workflows:
   version: 2
   build_circleci:
