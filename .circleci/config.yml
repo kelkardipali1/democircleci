@@ -106,6 +106,10 @@ jobs:
       - run:
           name: verify cluster
           command: kubectl get pods -A
+      - persist_to_workspace:
+          root: ~/democircleci
+          paths:
+            - aws_configure
 
 workflows:
   version: 2
@@ -122,6 +126,7 @@ workflows:
             - project_secrets
           requires:
             - build
+            - aws_configure
           filters:
             branches:
               only: circleci-project-setup
