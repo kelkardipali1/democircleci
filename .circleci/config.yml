@@ -5,6 +5,7 @@
 version: 2.1
 orbs:
 #  aws-eks: circleci/aws-eks@1.0.0
+  aws-ecr: circleci/aws-ecr@6.15.3
   kubernetes: circleci/kubernetes@0.11.1
 
 commands:
@@ -19,6 +20,7 @@ commands:
           command: |
             aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
             aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
+
 jobs:
   build:
     docker:
@@ -72,7 +74,9 @@ jobs:
           command: echo $NEXUS_USER
       - run:
           name: login to ECR Registry
-          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
+          command: LOGIN_COMMAND=$(aws ecr get-login --no-include-email --region
+            ap-south-1 --registry-ids 793463097803)
+            $LOGIN_COMMAND
 
 workflows:
   version: 2
