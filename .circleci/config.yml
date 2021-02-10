@@ -104,10 +104,13 @@ jobs:
       - run:
           name: verify cluster
           command: kubectl get pods -A
+      - run:
+          name: "Create landing folder for crg output"
+          command: mkdir -p /democircleci/crg/
       - persist_to_workspace:
-          root: ~/
+          root: ~/democircleci
           paths:
-            - aws
+            - crg
 
 workflows:
   version: 2
