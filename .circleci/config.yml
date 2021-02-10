@@ -86,7 +86,7 @@ jobs:
 #          command: docker login -u ${NEXUS_USER} -p ${NEXUS_PASSWORD} http://registry.hosted/repository/service-starter-docker-hosted/
 
   aws_configure:
-    working_directory: ~/democircleci
+    working_directory: ~/democircleci/aws
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
@@ -104,13 +104,11 @@ jobs:
       - run:
           name: verify cluster
           command: kubectl get pods -A
-      - run:
-          name: "Create landing folder for crg output"
-          command: mkdir -p /democircleci/crg/
+
       - persist_to_workspace:
           root: ~/democircleci
           paths:
-            - crg
+            - aws
 
 workflows:
   version: 2
