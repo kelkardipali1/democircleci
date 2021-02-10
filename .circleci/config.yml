@@ -6,27 +6,27 @@ version: 2.1
 orbs:
 #  aws-eks: circleci/aws-eks@1.0.0
   kubernetes: circleci/kubernetes@0.11.1
+
+commands:
+  install-dependencies:
+    steps:
+      - kubernetes/install
+      - run:
+          name: Aws cli installation
+          command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.16.312.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
 jobs:
   build:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
     working_directory: ~/democircleci
-
     environment:
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
-
     steps:
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -56,8 +56,8 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
+      - install-dependencies
       - setup_remote_docker
-#      - kubernetes/install
       - attach_workspace:
           at: ~/democircleci
       - run:
@@ -66,15 +66,6 @@ jobs:
       - run:
           name: get env from context
           command: echo $NEXUS_USER
-#      - run:
-#          name: install aws cli
-#          command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.16.312.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-#      - run:
-#          name: configure aws
-#          command: aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
-#      - run:
-#          name: get kubeconfig
-#          command: aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
       - run:
           name: verify cluster
           command: kubectl get pods -A
@@ -90,11 +81,8 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
+      - install-dependencies
       - setup_remote_docker
-      - kubernetes/install
-      - run:
-          name: install aws cli
-          command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.16.312.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
       - run:
           name: configure aws
           command: aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
@@ -104,11 +92,6 @@ jobs:
       - run:
           name: verify cluster
           command: kubectl get pods -A
-
-      - persist_to_workspace:
-          root: ~/democircleci
-          paths:
-            - aws
 
 workflows:
   version: 2
