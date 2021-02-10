@@ -59,7 +59,7 @@ jobs:
       - setup_remote_docker
 #      - kubernetes/install
       - attach_workspace:
-          at: ~/democircleci
+          at: ~/democircleci/aws
       - run:
           name: Build Docker image
           command:  docker build --file ${DOCKER_FILE} -t image .
