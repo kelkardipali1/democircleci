@@ -5,7 +5,7 @@
 version: 2.1
 orbs:
 #  aws-eks: circleci/aws-eks@1.0.0
-#  aws-ecr: circleci/aws-ecr@6.15.3
+  aws-ecr: circleci/aws-ecr@6.15.3
   kubernetes: circleci/kubernetes@0.11.1
 
 commands:
@@ -64,6 +64,18 @@ jobs:
     steps:
       - install-dependencies
       - setup_remote_docker
+      - aws-ecr/build-and-push-image:
+          account-url: 793463097803.dkr.ecr.ap-south-1.amazonaws.com
+          aws-access-key-id: $AWS_ACCESS_KEY
+          aws-secret-access-key: $AWS_SECRET_KEY
+          create-repo: true
+          dockerfile: $DOCKER_FILE
+          profile-name: myProfileName
+          region: ap-south-1
+          repo: democircleci
+          skip-when-tags-exist: false
+          tag: 'latest'
+
       - attach_workspace:
           at: ~/democircleci
       - run:
@@ -72,9 +84,9 @@ jobs:
       - run:
           name: get env from context
           command: echo $NEXUS_USER
-      - run:
-          name: login to ECR Registry
-          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
+#      - run:
+#          name: login to ECR Registry
+#          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
 
 workflows:
   version: 2
