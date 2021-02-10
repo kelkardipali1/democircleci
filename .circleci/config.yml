@@ -75,10 +75,9 @@ jobs:
       - run:
           name: get env from context
           command: echo $NEXUS_USER
-#      - run:
-#          name: login to ECR Registry
-#          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
-
+      - run:
+          name: docker tag
+          command: docker tag image 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
 workflows:
   version: 2
   build_circleci:
