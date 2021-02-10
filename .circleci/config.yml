@@ -22,7 +22,7 @@ commands:
             aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
       - run:
           name: aws ECR login
-          command: aws ecr get-login-password --region ap-south-1
+          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
 
 jobs:
   build:
