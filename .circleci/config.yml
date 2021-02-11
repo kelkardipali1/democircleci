@@ -28,7 +28,7 @@ commands:
           command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
       - run:
           name: check helm version
-          command: helm list -A
+          command: helm list -n nexus
 jobs:
   build:
     docker:
