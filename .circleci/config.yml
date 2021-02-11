@@ -87,6 +87,7 @@ jobs:
       - run:
           name: create ns
           command: kubectl create ns apps
+
       - run:
           name: helm install
           command: helm install democircleci democircleci -n apps
