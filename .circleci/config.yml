@@ -91,7 +91,6 @@ jobs:
           name: helm install
           command: |
           helm init
-          helm install democircleci democircleci -n apps
 workflows:
   version: 2
   build_circleci:
