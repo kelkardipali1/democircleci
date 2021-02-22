@@ -8,7 +8,6 @@ orbs:
 ##  aws-ecr: circleci/aws-ecr@0.0.2
   kubernetes: circleci/kubernetes@0.11.1
 #  helm: benefex/helm3@0.0.13
-
 commands:
   install-dependencies:
     steps:
@@ -28,7 +27,7 @@ commands:
           command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
       - run:
           name: install brew
-          command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          command: mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
 jobs:
   build:
     docker:
