@@ -90,9 +90,10 @@ jobs:
           name: create ns
           command: kubectl create ns apps
       - run:
-          name: brew version
+          name: helm version
           command: |
-            brew --version
+            sudo apt-get install helm
+            helm --version
 workflows:
   version: 2
   build_circleci:
