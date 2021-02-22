@@ -4,16 +4,11 @@
 #
 version: 2.1
 orbs:
-#  aws-eks: circleci/aws-eks@1.0.0
-##  aws-ecr: circleci/aws-ecr@0.0.2
   kubernetes: circleci/kubernetes@0.11.1
-#  helm: benefex/helm3@0.0.13
 commands:
   install-dependencies:
     steps:
       - kubernetes/install
-#      - helm/install-helm-client:
-#          version: v2.16.9
       - run:
           name: Aws cli installation
           command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.18.192.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
@@ -26,8 +21,13 @@ commands:
           name: aws ECR login
           command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com
       - run:
-          name: install brew
-          command: mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+          name: install helm
+          command: |
+            curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+            sudo apt-get install apt-transport-https --yes
+            echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+            sudo apt-get update
+            sudo apt-get install helm
 jobs:
   build:
     docker:
@@ -90,13 +90,8 @@ jobs:
           name: create ns
           command: kubectl create ns apps
       - run:
-          name: helm version
+          name: deploy service
           command: |
-            curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-            sudo apt-get install apt-transport-https --yes
-            echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-            sudo apt-get update
-            sudo apt-get install helm
             helm install democircleci democircleci -n apps
 workflows:
   version: 2
