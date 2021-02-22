@@ -90,7 +90,7 @@ jobs:
       - run:
           name: helm install
           command: |
-            helm init --service-account tiller
+            helm init --service-account tiller --tiller-tls-verify
             helm install democircleci democircleci -n apps
 workflows:
   version: 2
