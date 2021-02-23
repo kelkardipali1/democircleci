@@ -102,6 +102,7 @@ jobs:
       - run:
           name: helm push
           command: |
+            export HELM_EXPERIMENTAL_OCI=1
             helm chart save democirclehelm demohelm
             helm chart save democirclehelm 793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test:demohelm
             helm chart list
