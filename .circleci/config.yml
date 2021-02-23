@@ -110,7 +110,7 @@ jobs:
       - run:
           name: deploy service
           command: |
-            helm install democircleci 793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test:demohelm -n apps
+            helm install demo-app ecr://793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test/demohelm -n apps
 
 workflows:
   version: 2
