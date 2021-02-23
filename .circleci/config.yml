@@ -128,6 +128,8 @@ workflows:
             branches:
               only: circleci-project-setup
       - deploy_service:
+          context:
+            - AWS_SECRETS
           requires:
             - build_docker
           filters:
