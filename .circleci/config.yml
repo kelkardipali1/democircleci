@@ -129,7 +129,7 @@ workflows:
               only: circleci-project-setup
       - deploy_service:
           requires:
-            - build-docker
+            - build_docker
           filters:
             branches:
               only: circleci-project-setup
