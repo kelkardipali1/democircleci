@@ -12,22 +12,6 @@ commands:
       - run:
           name: Aws cli installation
           command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.18.192.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-      - run:
-          name: aws configure
-          command: |
-            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
-            aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
-      - run:
-          name: aws ECR login
-          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci
-      - run:
-          name: install helm
-          command: |
-            curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-            sudo apt-get install apt-transport-https --yes
-            echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-            sudo apt-get update
-            sudo apt-get install helm
 jobs:
   build:
     docker:
@@ -75,6 +59,9 @@ jobs:
       - attach_workspace:
           at: ~/democircleci
       - run:
+          name: aws ECR login
+          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci
+      - run:
           name: Build Docker image
           command:  docker build --file ${DOCKER_FILE} -t image .
       - run:
@@ -92,11 +79,26 @@ jobs:
       - checkout
       - install-dependencies
       - run:
+          name: aws configure
+          command: |
+            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
+            aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
+      - run:
+          name: install helm
+          command: |
+            curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+            sudo apt-get install apt-transport-https --yes
+            echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+            sudo apt-get update
+            sudo apt-get install helm
+      - run:
           name: create ns
           command: kubectl create ns apps
       - run:
           name: login to helm registry
-          command: aws ecr get-login-password  --region ap-south-1 | helm registry login  --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test
+          command: |
+            export HELM_EXPERIMENTAL_OCI=1
+            aws ecr get-login-password  --region ap-south-1 | helm registry login  --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test
       - run:
           name: helm push
           command: |
