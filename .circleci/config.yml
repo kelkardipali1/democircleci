@@ -83,6 +83,9 @@ jobs:
       - run:
           name: docker push
           command: docker push 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
+      - run:
+          name: check helm
+          command: helm version
 
   deploy_service:
     working_directory: ~/democircleci
