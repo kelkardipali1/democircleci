@@ -9,9 +9,9 @@ commands:
   install-dependencies:
     steps:
       - kubernetes/install
-      - run:
-          name: Aws cli installation
-          command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.18.192.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+#      - run:
+#          name: Aws cli installation
+#          command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.18.192.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
       - run:
           name: aws configure
           command: |
@@ -56,7 +56,10 @@ jobs:
       SERVICE: "democircle"
     working_directory: ~/democircleci
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: kelkardipali/custombuildpackforcircleci:1.0.0
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWORD
     steps:
       - checkout
       - install-dependencies
@@ -126,18 +129,19 @@ workflows:
       - build_docker:
           context:
             - AWS_SECRETS
+            - DOCKER_SECRETS
           requires:
             - build
           filters:
             branches:
               only: circleci-project-setup
-      - deploy_service:
-          context:
-            - AWS_SECRETS
-          requires:
-            - build_docker
-          filters:
-            branches:
-              only: circleci-project-setup
+#      - deploy_service:
+#          context:
+#            - AWS_SECRETS
+#          requires:
+#            - build_docker
+#          filters:
+#            branches:
+#              only: circleci-project-setup
 
 
