@@ -34,8 +34,8 @@ jobs:
       - persist_to_workspace:
           root: ~/democircleci
           paths:
-#            - Dockerfile
-            - build
+##            - Dockerfile
+#            - build
   build_docker:
     environment:
       DOCKER_FILE: "Dockerfile"
@@ -47,7 +47,7 @@ jobs:
           username: $DOCKER_USER
           password: $DOCKER_PASSWORD
     steps:
-#      - checkout
+      - checkout
       - setup_remote_docker
       - attach_workspace:
           at: ~/democircleci
