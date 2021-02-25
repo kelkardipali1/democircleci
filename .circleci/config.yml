@@ -3,12 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2.1
-#orbs:
-#  kubernetes: circleci/kubernetes@0.11.1
-#commands:
-#  install-dependencies:
-#    steps:
-#      - kubernetes/install
 jobs:
   build:
     docker:
@@ -54,8 +48,7 @@ jobs:
           password: $DOCKER_PASSWORD
     steps:
       - checkout
-#      - install-dependencies
-      - setup_remote_docker
+#      - setup_remote_docker
       - attach_workspace:
           at: ~/democircleci
       - run:
@@ -75,9 +68,6 @@ jobs:
       - run:
           name: docker push
           command: docker push 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
-      - run:
-          name: check kubectl
-          command: kubectl version
 
   deploy_service:
     working_directory: ~/democircleci
@@ -88,7 +78,6 @@ jobs:
           password: $DOCKER_PASSWORD
     steps:
       - checkout
-      - install-dependencies
       - run:
           name: aws configure
           command: |
@@ -132,14 +121,14 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
-#      - deploy_service:
-#          context:
-#            - AWS_SECRETS
-#            - DOCKER_SECRETS
-#          requires:
-#            - build_docker
-#          filters:
-#            branches:
-#              only: circleci-project-setup
+      - deploy_service:
+          context:
+            - AWS_SECRETS
+            - DOCKER_SECRETS
+          requires:
+            - build_docker
+          filters:
+            branches:
+              only: circleci-project-setup
 
 
