@@ -9,14 +9,6 @@ commands:
   install-dependencies:
     steps:
       - kubernetes/install
-#      - run:
-#          name: Aws cli installation
-#          command: curl "https://s3.amazonaws.com/aws-cli/awscli-bundle-1.18.192.zip" -o "awscli-bundle.zip" && unzip awscli-bundle.zip && sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-#      - run:
-#          name: aws configure
-#          command: |
-#            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
-#            aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
 jobs:
   build:
     docker:
@@ -90,21 +82,18 @@ jobs:
   deploy_service:
     working_directory: ~/democircleci
     docker:
-        - image: circleci/buildpack-deps:stretch
+      - image: kelkardipali/custombuildpackforcircleci:1.0.0
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWORD
     steps:
       - checkout
       - install-dependencies
       - run:
-          name: install helm
+          name: aws configure
           command: |
-            curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-            sudo apt-get install apt-transport-https --yes
-            echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-            sudo apt-get update
-            sudo apt-get install helm
-      - run:
-          name: create ns
-          command: kubectl create ns apps
+            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
+            aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
       - run:
           name: login to helm registry
           command: |
@@ -143,13 +132,14 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
-#      - deploy_service:
-#          context:
-#            - AWS_SECRETS
-#          requires:
-#            - build_docker
-#          filters:
-#            branches:
-#              only: circleci-project-setup
+      - deploy_service:
+          context:
+            - AWS_SECRETS
+            - DOCKER_SECRETS
+          requires:
+            - build_docker
+          filters:
+            branches:
+              only: circleci-project-setup
 
 
