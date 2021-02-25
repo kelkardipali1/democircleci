@@ -54,7 +54,7 @@ jobs:
           password: $DOCKER_PASSWORD
     steps:
       - checkout
-      - install-dependencies
+#      - install-dependencies
       - setup_remote_docker
       - attach_workspace:
           at: ~/democircleci
