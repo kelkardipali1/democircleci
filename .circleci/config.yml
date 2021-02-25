@@ -3,12 +3,12 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2.1
-orbs:
-  kubernetes: circleci/kubernetes@0.11.1
-commands:
-  install-dependencies:
-    steps:
-      - kubernetes/install
+#orbs:
+#  kubernetes: circleci/kubernetes@0.11.1
+#commands:
+#  install-dependencies:
+#    steps:
+#      - kubernetes/install
 jobs:
   build:
     docker:
