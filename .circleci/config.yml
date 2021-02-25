@@ -34,8 +34,7 @@ jobs:
       - persist_to_workspace:
           root: ~/democircleci
           paths:
-##            - Dockerfile
-#            - build
+            - build
   build_docker:
     environment:
       DOCKER_FILE: "Dockerfile"
@@ -49,8 +48,8 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-#      - attach_workspace:
-#          at: ~/democircleci
+      - attach_workspace:
+          at: ~/democircleci
       - run:
           name: aws configure
           command: |
