@@ -120,14 +120,14 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
-      - deploy_service:
-          context:
-            - AWS_SECRETS
-            - DOCKER_SECRETS
-          requires:
-            - build_docker
-          filters:
-            branches:
-              only: circleci-project-setup
+#      - deploy_service:
+#          context:
+#            - AWS_SECRETS
+#            - DOCKER_SECRETS
+#          requires:
+#            - build_docker
+#          filters:
+#            branches:
+#              only: circleci-project-setup
 
 
