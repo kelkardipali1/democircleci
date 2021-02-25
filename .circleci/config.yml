@@ -76,8 +76,8 @@ jobs:
           name: docker push
           command: docker push 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
       - run:
-          name: check helm
-          command: helm version
+          name: check kubectl
+          command: kubectl version
 
   deploy_service:
     working_directory: ~/democircleci
@@ -132,14 +132,14 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
-      - deploy_service:
-          context:
-            - AWS_SECRETS
-            - DOCKER_SECRETS
-          requires:
-            - build_docker
-          filters:
-            branches:
-              only: circleci-project-setup
+#      - deploy_service:
+#          context:
+#            - AWS_SECRETS
+#            - DOCKER_SECRETS
+#          requires:
+#            - build_docker
+#          filters:
+#            branches:
+#              only: circleci-project-setup
 
 
