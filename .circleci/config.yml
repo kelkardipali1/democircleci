@@ -76,7 +76,7 @@ jobs:
           username: $DOCKER_USER
           password: $DOCKER_PASSWORD
     steps:
-#      - checkout
+      - checkout
       - run:
           name: aws configure
           command: |
