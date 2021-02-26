@@ -53,19 +53,19 @@ jobs:
       - run:
           name: aws configure
           command: |
-            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
+            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region $AWS_REGION && aws configure list
       - run:
           name: aws ECR login
-          command: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci
+          command: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR_URL/democircleci
       - run:
           name: Build Docker image
           command:  docker build --file ${DOCKER_FILE} -t image .
       - run:
           name: docker tag
-          command: docker tag image 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
+          command: docker tag image $AWS_ECR_URL/democircleci:latest
       - run:
           name: docker push
-          command: docker push 793463097803.dkr.ecr.ap-south-1.amazonaws.com/democircleci:latest
+          command: docker push $AWS_ECR_URL/democircleci:latest
 
   deploy_service:
     working_directory: ~/democircleci
@@ -79,26 +79,26 @@ jobs:
       - run:
           name: aws configure
           command: |
-            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region ap-south-1 && aws configure list
-            aws eks update-kubeconfig --name infra-catalyst-central --region ap-south-1
+            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region $AWS_REGION && aws configure list
+            aws eks update-kubeconfig --name infra-catalyst-dev --region $AWS_REGION
       - run:
           name: login to helm registry
           command: |
             export HELM_EXPERIMENTAL_OCI=1
-            aws ecr get-login-password  --region ap-south-1 | helm registry login  --username AWS --password-stdin 793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test
+            aws ecr get-login-password  --region $AWS_REGION | helm registry login  --username AWS --password-stdin $AWS_ECR_URL/artifact-test
       - run:
           name: helm push
           command: |
             export HELM_EXPERIMENTAL_OCI=1
             helm chart save democirclehelm demohelm
-            helm chart save democirclehelm 793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test:demohelm
+            helm chart save democirclehelm $AWS_ECR_URL/artifact-test:demohelm
             helm chart list
-            helm chart push 793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test:demohelm
+            helm chart push $AWS_ECR_URL/artifact-test:demohelm
       - run:
           name: deploy service
           command: |
             helm plugin install https://github.com/vetyy/helm-ecr.git
-            helm install demo-app ecr://793463097803.dkr.ecr.ap-south-1.amazonaws.com/artifact-test/demohelm -n apps
+            helm install demo-app ecr://$AWS_ECR_URL/artifact-test/demohelm -n apps
 
 workflows:
   version: 2
