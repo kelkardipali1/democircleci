@@ -115,7 +115,7 @@ workflows:
             - AWS_SECRETS
             - DOCKER_SECRETS
           requires:
-            - build
+            - build_app
           filters:
             branches:
               only: circleci-project-setup
@@ -124,7 +124,7 @@ workflows:
             - AWS_SECRETS
             - DOCKER_SECRETS
           requires:
-            - build_docker
+            - build_image
           filters:
             branches:
               only: circleci-project-setup
