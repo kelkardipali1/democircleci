@@ -2,13 +2,12 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2.1
+version: 2
 jobs:
   build:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      - image: jshimko/kube-tools-aws
     working_directory: ~/democircleci
     environment:
       # Customize the JVM maximum heap limit
@@ -112,23 +111,23 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
-#      - build_docker:
-#          context:
-#            - AWS_SECRETS
-#            - DOCKER_SECRETS
-#          requires:
-#            - build
-#          filters:
-#            branches:
-#              only: circleci-project-setup
-#      - deploy_service:
-#          context:
-#            - AWS_SECRETS
-#            - DOCKER_SECRETS
-#          requires:
-#            - build_docker
-#          filters:
-#            branches:
-#              only: circleci-project-setup
+      - build_docker:
+          context:
+            - AWS_SECRETS
+            - DOCKER_SECRETS
+          requires:
+            - build
+          filters:
+            branches:
+              only: circleci-project-setup
+      - deploy_service:
+          context:
+            - AWS_SECRETS
+            - DOCKER_SECRETS
+          requires:
+            - build_docker
+          filters:
+            branches:
+              only: circleci-project-setup
 
 
