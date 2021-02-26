@@ -66,7 +66,6 @@ jobs:
       - run:
           name: docker push
           command: docker push $AWS_ECR_URL/democircleci:latest
-
   deploy_service:
     working_directory: ~/democircleci
     docker:
