@@ -35,7 +35,6 @@ jobs:
           root: ~/democircleci
           paths:
             - build
-      - run: kubectl version
   build_docker:
     environment:
       DOCKER_FILE: "Dockerfile"
