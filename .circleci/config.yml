@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  build_app:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -35,7 +35,7 @@ jobs:
           root: ~/democircleci
           paths:
             - build
-  build_docker:
+  build_image:
     environment:
       DOCKER_FILE: "Dockerfile"
       SERVICE: "democircle"
@@ -104,13 +104,13 @@ workflows:
   version: 2
   deploy_to_dev:
     jobs:
-      - build:
+      - build_app:
           context:
             - project_secrets
           filters:
             branches:
               only: circleci-project-setup
-      - build_docker:
+      - build_image:
           context:
             - AWS_SECRETS
             - DOCKER_SECRETS
