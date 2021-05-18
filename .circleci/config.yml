@@ -109,7 +109,7 @@ workflows:
             - project_secrets
           filters:
             branches:
-              only: circleci-project-setup
+              only: master
       - build_image:
           context:
             - AWS_SECRETS
@@ -118,7 +118,7 @@ workflows:
             - build_app
           filters:
             branches:
-              only: circleci-project-setup
+              only: master
 #      - deploy_service:
 #          context:
 #            - AWS_SECRETS
