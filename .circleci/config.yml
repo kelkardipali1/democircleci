@@ -67,38 +67,38 @@ jobs:
       - run:
           name: docker push
           command: docker push $AWS_ECR_URL/democircleci:${CIRCLE_SHA1}
-  deploy_service:
-    working_directory: ~/democircleci
-    docker:
-      - image: kelkardipali/custombuildpackforcircleci:1.0.0
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASSWORD
-    steps:
-      - checkout
-      - run:
-          name: aws configure
-          command: |
-            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region $AWS_REGION && aws configure list
-            aws eks update-kubeconfig --name infra-catalyst-dev --region $AWS_REGION
-      - run:
-          name: login to helm registry
-          command: |
-            export HELM_EXPERIMENTAL_OCI=1
-            aws ecr get-login-password  --region $AWS_REGION | helm registry login  --username AWS --password-stdin $AWS_ECR_URL/artifact-test
-      - run:
-          name: helm push
-          command: |
-            export HELM_EXPERIMENTAL_OCI=1
-            helm chart save democirclehelm demohelm
-            helm chart save democirclehelm $AWS_ECR_URL/artifact-test:demohelm
-            helm chart list
-            helm chart push $AWS_ECR_URL/artifact-test:demohelm
-      - run:
-          name: deploy service
-          command: |
-            helm plugin install https://github.com/vetyy/helm-ecr.git
-            helm install demo-app ecr://$AWS_ECR_URL/artifact-test/demohelm -n apps
+#  deploy_service:
+#    working_directory: ~/democircleci
+#    docker:
+#      - image: kelkardipali/custombuildpackforcircleci:1.0.0
+#        auth:
+#          username: $DOCKER_USER
+#          password: $DOCKER_PASSWORD
+#    steps:
+#      - checkout
+#      - run:
+#          name: aws configure
+#          command: |
+#            aws --version && aws configure set aws_access_key_id $AWS_ACCESS_KEY && aws configure set aws_secret_access_key $AWS_SECRET_KEY && aws configure set default.region $AWS_REGION && aws configure list
+#            aws eks update-kubeconfig --name infra-catalyst-dev --region $AWS_REGION
+#      - run:
+#          name: login to helm registry
+#          command: |
+#            export HELM_EXPERIMENTAL_OCI=1
+#            aws ecr get-login-password  --region $AWS_REGION | helm registry login  --username AWS --password-stdin $AWS_ECR_URL/artifact-test
+#      - run:
+#          name: helm push
+#          command: |
+#            export HELM_EXPERIMENTAL_OCI=1
+#            helm chart save democirclehelm demohelm
+#            helm chart save democirclehelm $AWS_ECR_URL/artifact-test:demohelm
+#            helm chart list
+#            helm chart push $AWS_ECR_URL/artifact-test:demohelm
+#      - run:
+#          name: deploy service
+#          command: |
+#            helm plugin install https://github.com/vetyy/helm-ecr.git
+#            helm install demo-app ecr://$AWS_ECR_URL/artifact-test/demohelm -n apps
 
 workflows:
   version: 2
@@ -119,14 +119,14 @@ workflows:
           filters:
             branches:
               only: circleci-project-setup
-      - deploy_service:
-          context:
-            - AWS_SECRETS
-            - DOCKER_SECRETS
-          requires:
-            - build_image
-          filters:
-            branches:
-              only: circleci-project-setup
+#      - deploy_service:
+#          context:
+#            - AWS_SECRETS
+#            - DOCKER_SECRETS
+#          requires:
+#            - build_image
+#          filters:
+#            branches:
+#              only: circleci-project-setup
 
 
